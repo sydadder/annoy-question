@@ -1,0 +1,110 @@
+<div class="container p-3 my-3">
+    <p>{{ subtitle }}</p>
+    <h4>{{question}} </h4>
+
+
+    <div class="container-challenge" data-comment="{{ comment }}">
+        <button type="button" class="yes-button btn btn-primary btn-lg">
+            {{ answer1 }}
+        </button>
+
+        <button type="button" class="ml-10 no-button btn btn-secondary btn-lg">
+            {{ answer2 }}
+        </button>
+    </div>
+
+    <div id="finalWords">
+        <h5>{{comment}} </h5>
+
+        <h6 class="mt-5">Wanna get back to {{questionAuthor}} ? Or create a question for someone else ? Do it
+            <a href="/create">here</a></h6>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    (function () {
+        const ObtainDetails = (msg, counter) => {
+            var myArray = ["-", "+"];
+            var randomItem = myArray[Math.floor(Math.random() * myArray.length)];
+
+            console.log(randomItem);
+
+            let returnList = {};
+            let Swidth = $(window).width();
+            let Sheight = $(window).height();
+            let p = $(".yes-button").position();
+            let buttonWidth = $(".yes-button").outerWidth();
+            let buttonHeight = $(".yes-button").outerHeight();
+            let rePosV = 0,
+                rePosH = 0;
+            // Reposition Values
+            let mV = Sheight - buttonHeight;
+            let mH = Swidth - buttonWidth;
+
+            let incrementPosV = Swidth / 4;
+            let incrementPosH = Sheight / 8;
+            if (p.left + incrementPosH > mH || p.left - incrementPosH <= 0) {
+                //Bring to center
+                rePosH = Swidth / 2;
+            } else {
+                if (randomItem == "-") {
+                    rePosH = p.left - incrementPosH;
+                } else rePosH = p.left + incrementPosH;
+            }
+
+            if (p.top + incrementPosV > mV || p.top - incrementPosV <= 0) {
+                //Bring to center
+                rePosV = Sheight / 2;
+            } else {
+                if (randomItem == "-") {
+                    rePosV = p.top - incrementPosV;
+                } else rePosV = p.top + incrementPosV;
+            }
+
+            //(counter % 2 == 0)
+
+            returnList = {
+                counter: counter,
+                Swidth: Swidth,
+                Sheight: Sheight,
+                p: p,
+                buttonWidth: buttonWidth,
+                mW: mV,
+                mH: mH,
+                rePosV: rePosV,
+                rePosH: rePosH,
+            };
+
+            console.log(msg + JSON.stringify(returnList));
+            return returnList;
+        };
+
+        var clickCount = 0;
+        //Main Function
+
+        $(".yes-button").mousedown(function () {
+            clickCount++;
+
+            $(this).addClass("absoluteposition");
+            let data = ObtainDetails("initial", clickCount);
+            console.log(data);
+
+            console.log(`Click:  ${JSON.stringify(data)}`);
+            console.log(
+                `Moved to position ${JSON.stringify(data.rePosV)} and ${JSON.stringify(
+                    data.rePosH
+                )}`
+            );
+            $(".btn-primary").animate({ top: data.rePosV, left: data.rePosH }, 1);
+        });
+
+        $(".no-button").click(function () {
+            $(".container-challenge").slideUp("fast", function () {
+                // Animation complete.
+                $("#finalWords").show();
+
+            });
+        });
+    })();
+</script>

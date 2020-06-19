@@ -1,0 +1,77 @@
+<div class="container p-3 my-3 border">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+        </ol>
+        <div class="float-right">
+            <a href="/survey" type="button" class="btn btn-primary">Fill a survey</a>
+        </div>
+    </nav>
+    <h1>{{ title }}</h1>
+    <p>{{description}}</p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Email</th>
+                <th scope="col">Question</th>
+                <th scope="col">Correct Answer</th>
+                <th scope="col">Incorrect Answer</th>
+                <th scope="col">Comment</th>
+                <th scope="col">Date Time</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {{#each Records}}
+            <tr>
+                <td colspan="4">
+                    {{@key}}
+                </td>
+            </tr>
+
+            {{#each this}}
+            <tr></tr>
+            <td></td>
+            <td><a target="_blank" href="/challenge/{{identifier}}"> {{ question }} </a></td>
+            <td>{{ correctAnswer }}</td>
+            <td>{{ incorrectAnswer }}</td>
+            <td>{{ PostComment }}</td>
+            <td>{{ creation_time }}</td>
+
+
+            </tr>
+            {{/each}}
+
+            {{/each}}
+
+
+        </tbody>
+    </table>
+
+
+</div>
+
+
+<script type="text/javascript">
+    $('body').on('click', '#triggerTreasureHunt', function () {
+        //Assign Random tiles to player
+        $(".treasureResults").html();
+
+        let valuePassed = $('#values').val();
+        var reg = /[0-9,]+$/;
+
+        if (reg.test(valuePassed)) {
+            $.ajax({
+                url: "/treasuresplit/" + valuePassed, success: function (result) {
+                    $(".treasureResults").html(result);
+                }
+            });
+        } else {
+            $(".treasureResults").html("<h4>Invalid entry.  Only numerics and commas are allowed</h4>");
+        }
+
+
+    });
+</script>

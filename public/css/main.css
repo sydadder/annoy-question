@@ -1,0 +1,10 @@
+#alert,
+#SuccessMessage,
+#urlGen,
+#finalWords {
+  display: none;
+}
+
+.absoluteposition {
+  position: absolute;
+}
